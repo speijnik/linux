@@ -1,4 +1,4 @@
-linux (3.2.0-20.34~lsmstub0) unstable; urgency=low
+linux (3.2.0-20.34~lsmstub0) precise; urgency=low
 
   * Added LSMStub patch and enabled it as default LSM.
   * WARNING: This kernel is not meant for use on production systems!

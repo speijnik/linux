@@ -84,3 +84,12 @@ GTAGS
 *.orig
 *~
 \#*#
+
+# debian/ generated files
+debian/changelog
+debian.master/control
+debian.master/control.stub
+debian/control
+debian/control.stub
+debian/copyright
+debian.master/d-i/kernel-versions
