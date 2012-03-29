@@ -1,3 +1,9 @@
+linux (3.2.0-20.34~lsmstub1) precise; urgency=low
+
+  * Fixed debian.master/config/enforce.
+
+ -- Stephan Peijnik <debian@sp.or.at>  Thu, 29 Mar 2012 13:18:37 +0200
+
 linux (3.2.0-20.34~lsmstub0) precise; urgency=low
 
   * Added LSMStub patch and enabled it as default LSM.
