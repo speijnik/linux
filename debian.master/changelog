@@ -1,3 +1,10 @@
+linux (3.2.0-20.34~lsmstub0) unstable; urgency=low
+
+  * Added LSMStub patch and enabled it as default LSM.
+  * WARNING: This kernel is not meant for use on production systems!
+
+ -- Stephan Peijnik <debian@sp.or.at>  Thu, 29 Mar 2012 12:12:45 +0200
+
 linux (3.2.0-20.33) precise; urgency=low
 
   [ Upstream Kernel Changes ]
