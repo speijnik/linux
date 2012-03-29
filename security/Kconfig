@@ -191,8 +191,28 @@ source security/yama/Kconfig
 
 source security/integrity/Kconfig
 
+config SECURITY_LSMSTUB
+	bool "LSMStub support (NOT PRODUCTION SAFE)"
+	depends on SECURITY && NET
+	select AUDIT
+	select SECURITY_PATH
+	select SECURITY_NETWORK
+	select SECURITYFS
+	default n
+        help
+          LSMStub support enables loadable LSMs.
+          This is intended for developers only and MUST NOT be enabled
+          on production systems. Being able to unload an LSM on a production
+          systems means that one can work around any policy the LSM implements.
+                
+          AGAIN: This is meant for development use only. 
+          DO NOT ENABLE ON PRODUCTION SYSTEMS.
+
+
+
 choice
 	prompt "Default security module"
+	default DEFAULT_SECURITY_LSMSTUB if SECURITY_LSMSTUB
 	default DEFAULT_SECURITY_SELINUX if SECURITY_SELINUX
 	default DEFAULT_SECURITY_SMACK if SECURITY_SMACK
 	default DEFAULT_SECURITY_TOMOYO if SECURITY_TOMOYO
@@ -203,6 +223,9 @@ choice
 	help
 	  Select the security module that will be used by default if the
 	  kernel parameter security= is not specified.
+
+	config DEFAULT_SECURITY_LSMSTUB
+		bool "LSMStub" if SECURITY_LSMSTUB=y
 
 	config DEFAULT_SECURITY_SELINUX
 		bool "SELinux" if SECURITY_SELINUX=y
@@ -226,6 +249,7 @@ endchoice
 
 config DEFAULT_SECURITY
 	string
+	default "lsmstub" if DEFAULT_SECURITY_LSMSTUB
 	default "selinux" if DEFAULT_SECURITY_SELINUX
 	default "smack" if DEFAULT_SECURITY_SMACK
 	default "tomoyo" if DEFAULT_SECURITY_TOMOYO
