@@ -13,7 +13,6 @@
  */
 
 #include <linux/magic.h>
-#include <linux/mnt_namespace.h>
 #include <linux/mount.h>
 #include <linux/namei.h>
 #include <linux/nsproxy.h>
@@ -137,7 +136,7 @@ static int d_namespace_path(struct path *path, char *buf, int buflen,
 			/* disconnected path, don't return pathname starting
 			 * with '/'
 			 */
-			error = -ESTALE;
+			error = -EACCES;
 			if (*res == '/')
 				*name = res + 1;
 		}

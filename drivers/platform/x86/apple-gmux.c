@@ -16,6 +16,8 @@
 #include <linux/backlight.h>
 #include <linux/acpi.h>
 #include <linux/pnp.h>
+#include <linux/apple_bl.h>
+#include <acpi/video.h>
 
 struct apple_gmux_data {
 	unsigned long iostart;
@@ -179,6 +181,15 @@ static int __devinit gmux_probe(struct pnp_dev *pnp,
 	bdev->props.brightness = gmux_get_brightness(bdev);
 	backlight_update_status(bdev);
 
+	/*
+	 * The backlight situation on Macs is complicated. If the gmux is
+	 * present it's the best choice, because it always works for
+	 * backlight control and supports more levels than other options.
+	 * Disable the other backlight choices.
+	 */
+	acpi_video_unregister();
+	apple_bl_unregister();
+
 	return 0;
 
 err_release:
@@ -195,6 +206,9 @@ static void __devexit gmux_remove(struct pnp_dev *pnp)
 	backlight_device_unregister(gmux_data->bdev);
 	release_region(gmux_data->iostart, gmux_data->iolen);
 	kfree(gmux_data);
+
+	acpi_video_register();
+	apple_bl_register();
 }
 
 static const struct pnp_device_id gmux_device_ids[] = {

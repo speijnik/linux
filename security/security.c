@@ -162,8 +162,7 @@ int security_capset(struct cred *new, const struct cred *old,
 int security_capable(struct user_namespace *ns, const struct cred *cred,
 		     int cap)
 {
-	return security_ops->capable(current, cred, ns, cap,
-				     SECURITY_CAP_AUDIT);
+	return security_ops->capable(cred, ns, cap, SECURITY_CAP_AUDIT);
 }
 
 int security_real_capable(struct task_struct *tsk, struct user_namespace *ns,
@@ -173,7 +172,7 @@ int security_real_capable(struct task_struct *tsk, struct user_namespace *ns,
 	int ret;
 
 	cred = get_task_cred(tsk);
-	ret = security_ops->capable(tsk, cred, ns, cap, SECURITY_CAP_AUDIT);
+	ret = security_ops->capable(cred, ns, cap, SECURITY_CAP_AUDIT);
 	put_cred(cred);
 	return ret;
 }
@@ -185,7 +184,7 @@ int security_real_capable_noaudit(struct task_struct *tsk,
 	int ret;
 
 	cred = get_task_cred(tsk);
-	ret = security_ops->capable(tsk, cred, ns, cap, SECURITY_CAP_NOAUDIT);
+	ret = security_ops->capable(cred, ns, cap, SECURITY_CAP_NOAUDIT);
 	put_cred(cred);
 	return ret;
 }
@@ -392,7 +391,7 @@ int security_old_inode_init_security(struct inode *inode, struct inode *dir,
 EXPORT_SYMBOL(security_old_inode_init_security);
 
 #ifdef CONFIG_SECURITY_PATH
-int security_path_mknod(struct path *dir, struct dentry *dentry, int mode,
+int security_path_mknod(struct path *dir, struct dentry *dentry, umode_t mode,
 			unsigned int dev)
 {
 	if (unlikely(IS_PRIVATE(dir->dentry->d_inode)))
@@ -401,7 +400,7 @@ int security_path_mknod(struct path *dir, struct dentry *dentry, int mode,
 }
 EXPORT_SYMBOL(security_path_mknod);
 
-int security_path_mkdir(struct path *dir, struct dentry *dentry, int mode)
+int security_path_mkdir(struct path *dir, struct dentry *dentry, umode_t mode)
 {
 	if (unlikely(IS_PRIVATE(dir->dentry->d_inode)))
 		return 0;
@@ -466,12 +465,11 @@ int security_path_truncate(struct path *path)
 }
 EXPORT_SYMBOL(security_path_truncate);
 
-int security_path_chmod(struct dentry *dentry, struct vfsmount *mnt,
-			mode_t mode)
+int security_path_chmod(struct path *path, umode_t mode)
 {
-	if (unlikely(IS_PRIVATE(dentry->d_inode)))
+	if (unlikely(IS_PRIVATE(path->dentry->d_inode)))
 		return 0;
-	return security_ops->path_chmod(dentry, mnt, mode);
+	return security_ops->path_chmod(path, mode);
 }
 EXPORT_SYMBOL(security_path_chmod);
 

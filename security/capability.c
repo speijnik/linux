@@ -235,13 +235,13 @@ static void cap_inode_getsecid(const struct inode *inode, u32 *secid)
 }
 
 #ifdef CONFIG_SECURITY_PATH
-static int cap_path_mknod(struct path *dir, struct dentry *dentry, int mode,
+static int cap_path_mknod(struct path *dir, struct dentry *dentry, umode_t mode,
 			  unsigned int dev)
 {
 	return 0;
 }
 
-static int cap_path_mkdir(struct path *dir, struct dentry *dentry, int mode)
+static int cap_path_mkdir(struct path *dir, struct dentry *dentry, umode_t mode)
 {
 	return 0;
 }
@@ -279,8 +279,7 @@ static int cap_path_truncate(struct path *path)
 	return 0;
 }
 
-static int cap_path_chmod(struct dentry *dentry, struct vfsmount *mnt,
-			  mode_t mode)
+static int cap_path_chmod(struct path *path, umode_t mode)
 {
 	return 0;
 }

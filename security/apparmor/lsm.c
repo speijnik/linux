@@ -138,16 +138,16 @@ static int apparmor_capget(struct task_struct *target, kernel_cap_t *effective,
 	return 0;
 }
 
-static int apparmor_capable(struct task_struct *task, const struct cred *cred,
-			    struct user_namespace *ns, int cap, int audit)
+static int apparmor_capable(const struct cred *cred, struct user_namespace *ns,
+			    int cap, int audit)
 {
 	struct aa_profile *profile;
 	/* cap_capable returns 0 on success, else -EPERM */
-	int error = cap_capable(task, cred, ns, cap, audit);
+	int error = cap_capable(cred, ns, cap, audit);
 	if (!error) {
 		profile = aa_cred_profile(cred);
 		if (!unconfined(profile))
-			error = aa_capable(task, profile, cap, audit);
+			error = aa_capable(current, profile, cap, audit);
 	}
 	return error;
 }
@@ -264,7 +264,7 @@ static int apparmor_path_unlink(struct path *dir, struct dentry *dentry)
 }
 
 static int apparmor_path_mkdir(struct path *dir, struct dentry *dentry,
-			       int mode)
+			       umode_t mode)
 {
 	return common_perm_create(OP_MKDIR, dir, dentry, AA_MAY_CREATE,
 				  S_IFDIR);
@@ -276,7 +276,7 @@ static int apparmor_path_rmdir(struct path *dir, struct dentry *dentry)
 }
 
 static int apparmor_path_mknod(struct path *dir, struct dentry *dentry,
-			       int mode, unsigned int dev)
+			       umode_t mode, unsigned int dev)
 {
 	return common_perm_create(OP_MKNOD, dir, dentry, AA_MAY_CREATE, mode);
 }
@@ -346,13 +346,12 @@ static int apparmor_path_rename(struct path *old_dir, struct dentry *old_dentry,
 	return error;
 }
 
-static int apparmor_path_chmod(struct dentry *dentry, struct vfsmount *mnt,
-			       mode_t mode)
+static int apparmor_path_chmod(struct path *path, umode_t mode)
 {
-	if (!mediated_filesystem(dentry->d_inode))
+	if (!mediated_filesystem(path->dentry->d_inode))
 		return 0;
 
-	return common_perm_mnt_dentry(OP_CHMOD, mnt, dentry, AA_MAY_CHMOD);
+	return common_perm_mnt_dentry(OP_CHMOD, path->mnt, path->dentry, AA_MAY_CHMOD);
 }
 
 static int apparmor_path_chown(struct path *path, uid_t uid, gid_t gid)
@@ -842,7 +841,7 @@ static struct security_operations apparmor_ops = {
 
 static int param_set_aabool(const char *val, const struct kernel_param *kp);
 static int param_get_aabool(char *buffer, const struct kernel_param *kp);
-#define param_check_aabool(name, p) __param_check(name, p, int)
+#define param_check_aabool param_check_bool
 static struct kernel_param_ops param_ops_aabool = {
 	.set = param_set_aabool,
 	.get = param_get_aabool
@@ -850,7 +849,7 @@ static struct kernel_param_ops param_ops_aabool = {
 
 static int param_set_aauint(const char *val, const struct kernel_param *kp);
 static int param_get_aauint(char *buffer, const struct kernel_param *kp);
-#define param_check_aauint(name, p) __param_check(name, p, int)
+#define param_check_aauint param_check_uint
 static struct kernel_param_ops param_ops_aauint = {
 	.set = param_set_aauint,
 	.get = param_get_aauint
@@ -858,7 +857,7 @@ static struct kernel_param_ops param_ops_aauint = {
 
 static int param_set_aalockpolicy(const char *val, const struct kernel_param *kp);
 static int param_get_aalockpolicy(char *buffer, const struct kernel_param *kp);
-#define param_check_aalockpolicy(name, p) __param_check(name, p, int)
+#define param_check_aalockpolicy param_check_bool
 static struct kernel_param_ops param_ops_aalockpolicy = {
 	.set = param_set_aalockpolicy,
 	.get = param_get_aalockpolicy

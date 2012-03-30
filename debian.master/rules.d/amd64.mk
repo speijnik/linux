@@ -10,6 +10,7 @@ install_file	= vmlinuz
 loader		= grub
 no_dumpfile	= true
 
+
 skipabi         = true
 skipmodule      = true
 skipdbg         = true
