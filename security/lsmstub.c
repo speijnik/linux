@@ -98,7 +98,7 @@ LSM_STUB_FUNC(ptrace_access_check, (struct task_struct* child,  unsigned int mod
 LSM_STUB_FUNC(ptrace_traceme, (struct task_struct* parent), parent);
 LSM_STUB_FUNC(capget, (struct task_struct* target, kernel_cap_t* effective, kernel_cap_t* inheritable,  kernel_cap_t* permitted), target, effective, inheritable, permitted);
 LSM_STUB_FUNC(capset, (struct cred* new, const struct cred* old, const kernel_cap_t* effective, const kernel_cap_t* inheritable, const kernel_cap_t* permitted), new, old, effective, inheritable, permitted);
-LSM_STUB_FUNC(capable, (struct task_struct *tsk, const struct cred* cred,  struct user_namespace* ns, int cap,  int audit), tsk, cred, ns, cap, audit);
+LSM_STUB_FUNC(capable, (const struct cred* cred,  struct user_namespace* ns, int cap,  int audit), cred, ns, cap, audit);
 LSM_STUB_FUNC(quotactl, (int cmds,  int type,  int id,  struct super_block* sb), cmds, type, id, sb);
 LSM_STUB_FUNC(quota_on, (struct dentry* dentry), dentry);
 LSM_STUB_FUNC(syslog, (int type), type);
@@ -124,14 +124,14 @@ LSM_STUB_FUNC_VOID(sb_clone_mnt_opts, (const struct super_block* oldsb, struct s
 LSM_STUB_FUNC(sb_parse_opts_str, (char* options,  struct security_mnt_opts* opts), options, opts);
 #ifdef CONFIG_SECURITY_PATH
 LSM_STUB_FUNC(path_unlink, (struct path* dir,  struct dentry* dentry), dir, dentry);
-LSM_STUB_FUNC(path_mkdir, (struct path* dir,  struct dentry* dentry, int mode), dir, dentry, mode);
+LSM_STUB_FUNC(path_mkdir, (struct path* dir,  struct dentry* dentry, umode_t mode), dir, dentry, mode);
 LSM_STUB_FUNC(path_rmdir, (struct path* dir,  struct dentry* dentry), dir, dentry);
-LSM_STUB_FUNC(path_mknod, (struct path* dir,  struct dentry* dentry, int mode, unsigned int dev), dir, dentry, mode, dev);
+LSM_STUB_FUNC(path_mknod, (struct path* dir,  struct dentry* dentry, umode_t mode, unsigned int dev), dir, dentry, mode, dev);
 LSM_STUB_FUNC(path_truncate, (struct path* path), path);
 LSM_STUB_FUNC(path_symlink, (struct path* dir,  struct dentry* dentry, const char* old_name), dir, dentry, old_name);
 LSM_STUB_FUNC(path_link, (struct dentry* old_dentry,  struct path* new_dir, struct dentry* new_dentry), old_dentry, new_dir, new_dentry);
 LSM_STUB_FUNC(path_rename, (struct path* old_dir,  struct dentry* old_dentry, struct path* new_dir,  struct dentry* new_dentry), old_dir, old_dentry, new_dir, new_dentry);
-LSM_STUB_FUNC(path_chmod, (struct dentry *dentry, struct vfsmount *mnt, mode_t mode), dentry, mnt, mode);
+LSM_STUB_FUNC(path_chmod, (struct path* path, umode_t mode), path, mode);
 LSM_STUB_FUNC(path_chown, (struct path* path,  uid_t uid,  gid_t gid), path, uid, gid);
 LSM_STUB_FUNC(path_chroot, (struct path* path), path);
 #endif
