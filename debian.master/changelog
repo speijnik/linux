@@ -1,3 +1,10 @@
+linux (3.2.0-20.34~lsmstub2) precise; urgency=low
+
+  * Fixed debian.master/rules.d/amd64.mk and debian.master/rules.d/i386.mk.
+  * THIS KERNEL IS NOT INTENDED FOR USE ON PRODUCTION SYSTEMS!.
+
+ -- Stephan Peijnik <debian@sp.or.at>  Fri, 30 Mar 2012 17:40:00 +0200
+
 linux (3.2.0-20.34~lsmstub1) precise; urgency=low
 
   * Fixed debian.master/config/enforce.
