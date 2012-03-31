@@ -10,7 +10,6 @@ install_file	= vmlinuz
 loader		= grub
 no_dumpfile	= true
 
-
 skipabi         = true
 skipmodule      = true
 skipdbg         = true
@@ -20,3 +19,4 @@ do_full_source          = true
 do_common_headers_indep = true
 do_libc_dev_package     = false
 do_tools                = false
+disable_d_i             = true

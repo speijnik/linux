@@ -19,3 +19,4 @@ do_full_source          = true
 do_common_headers_indep = true
 do_libc_dev_package     = false
 do_tools                = false
+disable_d_i             = true
