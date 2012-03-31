@@ -1,10 +1,10 @@
-linux (3.2.0-21.35~lsmstub1) unstable; urgency=low
+linux (3.2.0-21.35~lsmstub1) precise; urgency=low
 
   * Set disable_d_i to true for amd64 and i386 kernels.
   * NOT PRODUCTION SAFE!
   * Rebuild because of strange failure of i386 build.
 
- -- Stephan Peijnik <debian@sp.or.at>  Sat, 31 Mar 2012 22:56:00 +0200
+ -- Stephan Peijnik <debian@sp.or.at>  Sat, 31 Mar 2012 23:19:33 +0200
 
 linux (3.2.0-21.35~lsmstub0) precise; urgency=low
 
