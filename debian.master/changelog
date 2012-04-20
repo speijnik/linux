@@ -1,3 +1,11 @@
+linux (3.2.0-23.37~lsmstub1) precise; urgency=low
+
+  * Based on 3.2.0-23.36.
+  * NOT PRODUCTION SAFE!
+  * Disabled broken HYPERV drivers.
+
+ -- Stephan Peijnik <debian@sp.or.at>  Fri, 20 Apr 2012 13:48:23 +0200
+
 linux (3.2.0-23.37~lsmstub0) precise; urgency=low
 
   * Based on 3.2.0-23.36.
