@@ -189,9 +189,6 @@ ifeq ($(arch),powerpc)
 endif
 	# Script to symlink everything up
 	$(SHELL) $(DROOT)/scripts/link-headers "$(hdrdir)" "$(basepkg)" "$*"
-	# Setup the proper asm symlink
-	rm -f $(hdrdir)/include/asm
-	ln -s asm-$(asm_link) $(hdrdir)/include/asm
 	# The build symlink
 	install -d debian/$(basepkg)-$*/lib/modules/$(abi_release)-$*
 	ln -s /usr/src/$(basepkg)-$* \
@@ -401,6 +398,7 @@ ifeq ($(do_tools),true)
 	if [ "$(arch)" = "amd64" ] || [ "$(arch)" = "i386" ]; then \
 		cd $(builddir)/tools/tools/power/x86/x86_energy_perf_policy && make CROSS_COMPILE=$(CROSS_COMPILE); \
 		cd $(builddir)/tools/tools/power/x86/turbostat && make CROSS_COMPILE=$(CROSS_COMPILE); \
+		cd $(builddir)/tools/tools/hv && make CROSS_COMPILE=$(CROSS_COMPILE) CFLAGS=-I../../include; \
 	fi
 endif
 	@touch $@
@@ -417,6 +415,9 @@ ifeq ($(do_tools),true)
 			$(toolspkgdir)/usr/bin/x86_energy_perf_policy_$(abi_release); \
 		install -s -m755 $(builddir)/tools/tools/power/x86/turbostat/turbostat \
 			$(toolspkgdir)/usr/bin/turbostat_$(abi_release); \
+		install -d $(toolspkgdir)/usr/sbin; \
+		install -s -m755 $(builddir)/tools/tools/hv/hv_kvp_daemon \
+			$(toolspkgdir)/usr/sbin/hv_kvp_daemon_$(abi_release); \
 	fi
 endif
 
