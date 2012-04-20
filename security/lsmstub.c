@@ -74,7 +74,8 @@ static DEFINE_RWLOCK(lsmstub_ops_rwlock);
     }							\
     __LSM_STUB_FOOTER();				\
   out:							\
-    return res;						\
+    return res ? res :					\
+    lsmstub_null_ops. NAME(__VA_ARGS__);		\
   }
   
 #define LSM_STUB_FUNC_VOID(NAME, SIGNATURE, ...)	\
@@ -91,6 +92,7 @@ static DEFINE_RWLOCK(lsmstub_ops_rwlock);
     }							\
     __LSM_STUB_FOOTER();				\
   out:							\
+    lsmstub_null_ops. NAME (__VA_ARGS__);		\
     return;						\
   }
 
